@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Estimasi Overtime</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+
+  <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
+    <h1 class="text-2xl font-bold text-center mb-4">Kalkulator Estimasi Overtime</h1>
+    
+    <div class="space-y-4">
+      <div>
+        <label for="basic" class="block text-sm font-medium text-gray-700">Basic Salary (Rp)</label>
+        <input type="text" id="basic" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Masukkan gaji pokok" oninput="formatCurrency(this)">
+      </div>
+
+      <div>
+        <label for="ot-time" class="block text-sm font-medium text-gray-700">Jumlah Waktu OT (jam)</label>
+        <input type="number" id="ot-time" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Masukkan jumlah jam OT">
+      </div>
+
+      <div class="flex justify-between">
+        <button onclick="calculateOT()" class="w-full py-2 mt-4 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+          Hitung Estimasi OT
+        </button>
+      </div>
+
+      <div id="result" class="mt-4 text-xl font-semibold text-center text-green-600 hidden">
+        Estimasi OT: Rp <span id="ot-result">0</span>
+      </div>
+
+      <div class="flex justify-between mt-6">
+        <a href="dashboard.html" class="w-full py-2 bg-gray-300 text-gray-800 rounded-md text-center hover:bg-gray-400">
+          Kembali ke Dashboard
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Fungsi untuk memformat angka dengan pemisah ribuan
+    function formatCurrency(input) {
+      let value = input.value.replace(/[^\d]/g, ''); // Hapus karakter non-digit
+      if (value.length > 3) {
+        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Tambahkan koma setiap 3 digit
+      }
+      input.value = value;
+    }
+
+    function calculateOT() {
+      const basicSalaryInput = document.getElementById('basic').value;
+      const basicSalary = parseFloat(basicSalaryInput.replace(/[^\d.-]/g, '')); // Hapus koma saat perhitungan
+      const otTime = parseFloat(document.getElementById('ot-time').value);
+
+      if (isNaN(basicSalary) || isNaN(otTime) || basicSalary <= 0 || otTime <= 0) {
+        alert('Silakan masukkan nilai yang valid');
+        return;
+      }
+
+      // Hitung Estimasi OT
+      const otEstimation = (basicSalary / 173) * otTime;
+
+      // Format angka dengan pemisah ribuan (koma)
+      const formattedOT = otEstimation.toLocaleString('id-ID', {
+        style: 'decimal',
+        maximumFractionDigits: 2
+      });
+
+      // Tampilkan hasil dengan format yang lebih mudah dibaca
+      document.getElementById('ot-result').textContent = formattedOT;
+      document.getElementById('result').classList.remove('hidden');
+    }
+  </script>
+
+</body>
+</html>
