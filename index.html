@@ -58,13 +58,9 @@
       const basicSalary = parseFloat(basicSalaryInput.replace(/[^\d.-]/g, '')); // Hapus koma saat perhitungan
 
       if (!isNaN(basicSalary) && basicSalary > 0) {
-        const dailySalary = basicSalary / 173;
-        // Format angka dengan pemisah ribuan (koma)
-        const formattedDailySalary = dailySalary.toLocaleString('id-ID', {
-          style: 'decimal',
-          maximumFractionDigits: 2
-        });
-
+        const dailySalary = Math.floor(basicSalary / 173); // Hasil pembulatan bulat ke bawah
+        // Format angka dengan pemisah ribuan
+        const formattedDailySalary = dailySalary.toLocaleString('id-ID');
         document.getElementById('basic-salary-value').textContent = formattedDailySalary;
         document.getElementById('basic-salary-result').classList.remove('hidden');
       } else {
@@ -83,15 +79,12 @@
       }
 
       // Hitung Estimasi OT
-      const otEstimation = (basicSalary / 173) * otTime;
+      const otEstimation = Math.floor((basicSalary / 173) * otTime); // Pembulatan hasil OT ke bawah
 
-      // Format angka dengan pemisah ribuan (koma)
-      const formattedOT = otEstimation.toLocaleString('id-ID', {
-        style: 'decimal',
-        maximumFractionDigits: 2
-      });
+      // Format angka dengan pemisah ribuan
+      const formattedOT = otEstimation.toLocaleString('id-ID');
 
-      // Tampilkan hasil dengan format yang lebih mudah dibaca
+      // Tampilkan hasil dengan format yang lebih mudah dibaca tanpa koma atau desimal
       document.getElementById('ot-result').textContent = formattedOT;
       document.getElementById('result').classList.remove('hidden');
     }
