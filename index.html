@@ -14,7 +14,9 @@
     <div class="space-y-4">
       <div>
         <label for="basic" class="block text-sm font-medium text-gray-700">Basic Salary (Rp)</label>
-        <input type="text" id="basic" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Masukkan gaji pokok" oninput="formatCurrency(this)">
+        <input type="text" id="basic" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Masukkan gaji pokok" oninput="formatCurrency(this); updateBasicSalary();">
+        <!-- Menampilkan hasil basic salary / 173 -->
+        <div id="basic-salary-result" class="mt-2 text-sm text-gray-600 hidden">Perhitungan per hari: Rp <span id="basic-salary-value">0</span></div>
       </div>
 
       <div>
@@ -33,7 +35,7 @@
       </div>
 
       <div class="flex justify-between mt-6">
-        <a href="https://shorturl.at/VIySN" class="w-full py-2 bg-gray-300 text-gray-800 rounded-md text-center hover:bg-gray-400">
+        <a href="dashboard.html" class="w-full py-2 bg-gray-300 text-gray-800 rounded-md text-center hover:bg-gray-400">
           Kembali ke Dashboard
         </a>
       </div>
@@ -48,6 +50,26 @@
         value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Tambahkan koma setiap 3 digit
       }
       input.value = value;
+    }
+
+    // Fungsi untuk memperbarui perhitungan basic salary / 173
+    function updateBasicSalary() {
+      const basicSalaryInput = document.getElementById('basic').value;
+      const basicSalary = parseFloat(basicSalaryInput.replace(/[^\d.-]/g, '')); // Hapus koma saat perhitungan
+
+      if (!isNaN(basicSalary) && basicSalary > 0) {
+        const dailySalary = basicSalary / 173;
+        // Format angka dengan pemisah ribuan (koma)
+        const formattedDailySalary = dailySalary.toLocaleString('id-ID', {
+          style: 'decimal',
+          maximumFractionDigits: 2
+        });
+
+        document.getElementById('basic-salary-value').textContent = formattedDailySalary;
+        document.getElementById('basic-salary-result').classList.remove('hidden');
+      } else {
+        document.getElementById('basic-salary-result').classList.add('hidden');
+      }
     }
 
     function calculateOT() {
